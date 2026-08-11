@@ -19,7 +19,7 @@ jobs:
           cache: maven
 
       - name: Test
-        run: mvn -B test
+        run: sh ./mvnw -B test
 
       - name: Validate Docker Compose
         run: docker compose config

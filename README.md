@@ -9,12 +9,9 @@
 ![OpenAPI](https://img.shields.io/badge/OpenAPI-Swagger%20UI-85EA2D?logo=swagger)
 ![Project](https://img.shields.io/badge/Project-Portfolio-blue)
 
-
 **CarHub360** ist eine Jakarta-EE/WildFly-REST-Anwendung für Autohandel und Fahrzeugvermietung.
 
-Das Projekt bildet zentrale Prozesse eines Autohauses ab: Kundenverwaltung, Adressen, Fahrzeugbestand, Verkaufsfahrzeuge, Mietfahrzeuge, Kauf- und Mietverträge, Zahlungen, Wartungen und Kundenhistorien. Der Schwerpunkt liegt auf einer nachvollziehbaren Backend-Architektur mit REST-API, JPA-Persistenz, fachlicher Validierung, OpenAPI-Dokumentation, Docker-Start und automatisierten Tests.
-
----
+Das Projekt bildet zentrale Prozesse eines Autohauses ab: Kundenverwaltung, Adressen, Fahrzeugbestand, Verkaufsfahrzeuge, Mietfahrzeuge, Kauf- und Mietverträge, Zahlungen, Wartungen und Kundenhistorien. Der Schwerpunkt liegt auf einer nachvollziehbaren Backend-Architektur mit Package-by-Feature-Struktur, REST-API, JPA-Persistenz, fachlicher Validierung, OpenAPI-Dokumentation, Docker-Start und automatisierten Tests.
 
 ## Inhaltsverzeichnis
 
@@ -23,24 +20,17 @@ Das Projekt bildet zentrale Prozesse eines Autohauses ab: Kundenverwaltung, Adre
 * [Screenshots](#screenshots)
 * [Features](#features)
 * [Tech-Stack](#tech-stack)
-* [Schichten](#Schichten)
-* [Datenmodell](#datenmodell)
-* [Lokaler Start](#lokaler-start)
-* [API-Dokumentation](#api-dokumentation)
-* [API-Beispiele](#api-beispiele)
-* [Wichtige Endpunkte](#wichtige-endpunkte)
+* [Installation / lokaler Start](#installation--lokaler-start)
+* [Nutzung und API-Beispiele](#nutzung-und-api-beispiele)
 * [Tests](#tests)
-* [CI](#ci)
 * [Projektstruktur](#projektstruktur)
 * [Roadmap](#roadmap)
 * [Autor](#autor)
-* [License](#License)
-
----
+* [Lizenz](#lizenz)
 
 ## Projektziel
 
-CarHub360 demonstriert den Aufbau einer strukturierten Java-Backend-Anwendung für ein realistisch abgegrenztes FH-Projekt. Die Anwendung stellt nicht nur einzelne CRUD-Endpunkte bereit, sondern macht fachliche Regeln sichtbar:
+CarHub360 demonstriert den Aufbau einer strukturierten Java-Backend-Anwendung für ein realistisch abgegrenztes FH- und Portfolio-Projekt. Die Anwendung stellt nicht nur CRUD-Endpunkte bereit, sondern macht fachliche Regeln sichtbar:
 
 * Kunden können angelegt, aktualisiert, gelesen und per Soft Delete deaktiviert werden.
 * Fahrzeuge werden als Basismodell, Verkaufsfahrzeuge und Mietfahrzeuge verwaltet.
@@ -49,25 +39,21 @@ CarHub360 demonstriert den Aufbau einer strukturierten Java-Backend-Anwendung f�
 * Zahlungen, Wartungen und Kundenhistorien sind eigenen fachlichen Bereichen zugeordnet.
 * Die REST-API ist über Swagger UI testbar und über OpenAPI maschinenlesbar dokumentiert.
 
----
-
 ## Aktueller Status
 
 | Bereich | Status |
 | --- | --- |
 | REST-API | Implementiert |
+| Package-by-Feature-Struktur | Implementiert |
 | Swagger UI / OpenAPI | Implementiert |
 | Docker-Start | Implementiert |
 | JPA-Persistenz | Implementiert |
 | H2-Demo-Datenbank | Implementiert |
-| Service-Schicht | Implementiert |
-| Repository-Schicht | Implementiert |
-| DTOs und Validierung | Implementiert |
-| Unit-/Service-Tests | Implementiert |
+| DTO-basierte Requests und Responses | Implementiert |
+| Fachliche Validierung | Implementiert |
+| Unit- und Integrationstests | Implementiert |
 | GitHub Actions CI | Implementiert |
 | Eigenes Web-Frontend | Nicht Bestandteil dieses Projekts |
-
----
 
 ## Screenshots
 
@@ -79,8 +65,6 @@ CarHub360 demonstriert den Aufbau einer strukturierten Java-Backend-Anwendung f�
 
 <img src="docs/screenshots/Swagger-OpenAPI.png" alt="Swagger-OpenAPI-Dokumentation" width="900">
 
----
-
 ## Features
 
 ### Kunden
@@ -89,6 +73,7 @@ CarHub360 demonstriert den Aufbau einer strukturierten Java-Backend-Anwendung f�
 * Soft Delete statt physischer Löschung
 * eindeutige E-Mail-Adressen
 * optionale Adresse direkt beim Kunden
+* Kundenhistorie mit Bewertungen und Aktionen
 
 ### Fahrzeuge
 
@@ -115,11 +100,9 @@ CarHub360 demonstriert den Aufbau einer strukturierten Java-Backend-Anwendung f�
 
 * Swagger UI für manuelle API-Tests
 * OpenAPI JSON für API-Clients und Tools
-* JUnit-5-Tests für zentrale Workflows
+* JUnit-5-Tests für zentrale Workflows und fachliche Regeln
 * JaCoCo-Testreport im Maven-Build
 * GitHub-Actions-Pipeline für Tests und Docker-Compose-Validierung
-
----
 
 ## Tech-Stack
 
@@ -132,49 +115,16 @@ CarHub360 demonstriert den Aufbau einer strukturierten Java-Backend-Anwendung f�
 | Business Layer | EJB Services |
 | Persistenz | JPA / Hibernate 6 |
 | Datenbank | H2, über WildFly `ExampleDS` |
-| Validierung | Jakarta Bean Validation |
+| Validierung | Jakarta Bean Validation, fachliche Validatoren |
 | JSON | Jackson |
 | API-Dokumentation | OpenAPI / Swagger UI |
-| Build | Maven |
+| Build | Maven Wrapper |
 | Tests | JUnit 5, H2 Test Persistence Unit |
 | Coverage | JaCoCo |
 | Container | Docker, Docker Compose |
 | CI | GitHub Actions |
 
----
-
-## Schichten
-
-Die Anwendung ist in fachlich klare Schichten getrennt. REST-Resources enthalten HTTP-spezifische Logik, während Fachregeln in Services liegen. Persistenzzugriff ist in Repositories gekapselt.
-
-| Paket | Aufgabe |
-| --- | --- |
-| `de.fherfurt.api` | REST-Resources, HTTP-Responses, OpenAPI-Anbindung |
-| `de.fherfurt.api.dto` | Request-DTOs für sichere API-Eingaben |
-| `de.fherfurt.service` | Fachlogik, Validierung und Ablaufregeln |
-| `de.fherfurt.core.repository` | JPA-Zugriff und Abfragen |
-| `de.fherfurt.core.entity` | Persistente Fachobjekte |
-| `de.fherfurt.core.validation` | wiederverwendbare fachliche Validierung |
-
----
-
-## Datenmodell
-
-| Entity | Beschreibung |
-| --- | --- |
-| `Customer` | Kunde mit Stammdaten, Adresse und Soft-Delete-Status |
-| `CustomerAddress` | wiederverwendbare Kundenadresse |
-| `Vehicle` | Basisfahrzeug mit Marke, Modell, Kilometerstand, Baujahr und Typ |
-| `SaleVehicle` | Verkaufsfahrzeug mit Verkaufspreis und Neuwagenstatus |
-| `RentVehicle` | Mietfahrzeug mit Tagespreis, Kennzeichen, Kaution und Verfügbarkeit |
-| `Contract` | Kauf- oder Mietvertrag mit Kunden- und Fahrzeugbezug |
-| `Payment` | Zahlung eines Kunden mit Zahlungsart, Status und Betrag |
-| `Maintenance` | Wartungsdatensatz für ein Fahrzeug |
-| `CustomerHistory` | Historieneintrag für Kundenaktionen und Bewertungen |
-
----
-
-## Lokaler Start
+## Installation / lokaler Start
 
 ### Voraussetzungen
 
@@ -216,9 +166,9 @@ Linux/macOS:
 sh ./mvnw test
 ```
 
----
+## Nutzung und API-Beispiele
 
-## API-Dokumentation
+### API-Dokumentation
 
 Nach dem Start kann die API direkt im Browser getestet werden:
 
@@ -231,12 +181,6 @@ Die OpenAPI-Spezifikation wird hier ausgeliefert:
 ```text
 http://localhost:8080/carhub360/api/openapi.json
 ```
-
-Swagger UI ist so konfiguriert, dass Requests gegen den korrekten Deployment-Kontext `/carhub360` ausgeführt werden.
-
----
-
-## API-Beispiele
 
 ### Kunden anlegen
 
@@ -276,22 +220,6 @@ curl -X POST "http://localhost:8080/carhub360/api/rent-vehicles" \
   }'
 ```
 
-### Verkaufsfahrzeug anlegen
-
-```bash
-curl -X POST "http://localhost:8080/carhub360/api/sale-vehicles" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Golf",
-    "brand": "VW",
-    "kilometerCount": 12000,
-    "constructionYear": 2021,
-    "type": "Compact",
-    "salePrice": 22900,
-    "newVehicle": false
-  }'
-```
-
 ### Mietvertrag anlegen
 
 Die IDs müssen zu vorhandenen Datensätzen passen.
@@ -309,22 +237,7 @@ curl -X POST "http://localhost:8080/carhub360/api/contracts" \
   }'
 ```
 
-### Kaufvertrag anlegen
-
-```bash
-curl -X POST "http://localhost:8080/carhub360/api/contracts" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "customerId": 1,
-    "saleVehicleId": 1,
-    "rentalContract": false,
-    "contractDate": "2026-06-28"
-  }'
-```
-
----
-
-## Wichtige Endpunkte
+### Wichtige Endpunkte
 
 | Methode | Pfad | Beschreibung |
 | --- | --- | --- |
@@ -349,18 +262,17 @@ curl -X POST "http://localhost:8080/carhub360/api/contracts" \
 | `GET` | `/api/customer-history` | Kundenhistorie auflisten |
 | `POST` | `/api/customer-history` | Historieneintrag anlegen |
 
----
-
 ## Tests
 
-Die Tests prüfen zentrale Workflows der Anwendung:
+Die Tests prüfen zentrale Workflows und fachliche Regeln:
 
-* Kunden anlegen, lesen und per Soft Delete deaktivieren
+* Kunden anlegen, lesen, aktualisieren und per Soft Delete deaktivieren
 * doppelte E-Mail-Adressen verhindern
 * Kaufvertrag und Mietvertrag fachlich validieren
 * Mietfahrzeug bei Vertragsanlage sperren und beim Löschen wieder freigeben
 * Zahlungen, Wartungen und Kundenhistorien über Services verarbeiten
 * OpenAPI-Registrierung und Swagger-UI-Konfiguration absichern
+* Validatoren, Referenz-Services und fachliche Hilfsservices isoliert testen
 
 Testlauf:
 
@@ -371,13 +283,12 @@ Testlauf:
 Erwartetes Ergebnis:
 
 ```text
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
----
+Die konkrete Testanzahl kann sich mit weiterem Ausbau ändern. Aktuell deckt die Suite die Kernworkflows und ausgelagerten Fachservices ab.
 
-## CI
+### CI
 
 Die GitHub-Actions-Pipeline `CI` läuft bei `push` und `pull_request`.
 
@@ -385,7 +296,7 @@ Sie führt aus:
 
 * Checkout des Repositories
 * Java-17-Setup mit Temurin
-* Maven-Testlauf mit `mvn -B test`
+* Maven-Testlauf über den Projekt-Wrapper mit `sh ./mvnw -B test`
 * Validierung der Docker-Compose-Konfiguration mit `docker compose config`
 
 Workflow-Datei:
@@ -394,9 +305,60 @@ Workflow-Datei:
 .github/workflows/ci.yml
 ```
 
----
-
 ## Projektstruktur
+
+Die Anwendung ist nach Package-by-Feature strukturiert. Jede fachliche Domäne enthält ihre Resource-, Service-, Repository-, Entity-, Mapper- und DTO-Bausteine möglichst nah beieinander.
+
+```text
+src/main/java/de/fherfurt/carhub360
+|-- WebApplication.java
+|-- customer
+|   |-- dto
+|   |-- address
+|   |-- history
+|   |-- Customer.java
+|   |-- CustomerResource.java
+|   |-- CustomerService.java
+|   |-- CustomerRepository.java
+|   |-- CustomerMapper.java
+|   |-- CustomerValidator.java
+|   |-- CustomerReferenceService.java
+|   |-- CustomerEmailUniquenessService.java
+|   `-- CustomerProfileUpdater.java
+|-- vehicle
+|   |-- dto
+|   |-- sale
+|   |-- rent
+|   |-- Vehicle.java
+|   |-- VehicleResource.java
+|   |-- VehicleService.java
+|   |-- VehicleRepository.java
+|   |-- VehicleMapper.java
+|   |-- VehicleValidator.java
+|   |-- VehicleReferenceService.java
+|   `-- VehicleFields.java
+|-- contract
+|   |-- dto
+|   |-- Contract.java
+|   |-- ContractResource.java
+|   |-- ContractService.java
+|   |-- ContractRepository.java
+|   |-- ContractMapper.java
+|   |-- ContractValidator.java
+|   |-- ContractValidationService.java
+|   |-- ContractReferenceResolver.java
+|   |-- ContractRentalVehicleService.java
+|   |-- ContractPriceCalculator.java
+|   `-- ContractFactory.java
+|-- payment
+|-- maintenance
+`-- shared
+    |-- api
+    |-- dto
+    `-- validation
+```
+
+Weitere Projektdateien:
 
 ```text
 CarHub360/
@@ -406,30 +368,19 @@ CarHub360/
 |-- pom.xml
 |-- mvnw
 |-- mvnw.cmd
-|-- src/
-|   |-- main/
-|   |   |-- java/de/fherfurt/
-|   |   |   |-- api/
-|   |   |   |-- service/
-|   |   |   `-- core/
-|   |   |-- resources/META-INF/persistence.xml
-|   |   `-- webapp/
-|   |       |-- WEB-INF/web.xml
-|   |       `-- swagger-ui/index.html
-|   `-- test/
-|       |-- java/de/fherfurt/
-|       `-- resources/META-INF/persistence.xml
 |-- docs/screenshots
+|-- src/main/resources/META-INF/persistence.xml
+|-- src/test/resources/META-INF/persistence.xml
 `-- README.md
 ```
-
----
 
 ## Roadmap
 
 * [x] REST-API für Kernmodule
+* [x] Package-by-Feature-Struktur
 * [x] Service- und Repository-Schicht
 * [x] DTO-basierte Request-Verarbeitung
+* [x] fachliche Validierung in eigenen Services und Validatoren
 * [x] OpenAPI/Swagger UI
 * [x] Docker-Start über Docker Compose
 * [x] automatisierte Tests
@@ -440,15 +391,11 @@ CarHub360/
 * [ ] Authentifizierung und Rollenmodell
 * [ ] separates Web-Frontend
 
----
-
 ## Autor
 
 Mohammad Taiba
 
----
-
-## License
+## Lizenz
 
 Copyright (c) 2026 Mohammad Taiba. All rights reserved.
 
