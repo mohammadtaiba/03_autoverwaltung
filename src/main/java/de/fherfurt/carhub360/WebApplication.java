@@ -6,6 +6,7 @@ import de.fherfurt.carhub360.customer.CustomerResource;
 import de.fherfurt.carhub360.customer.history.CustomerHistoryResource;
 import de.fherfurt.carhub360.maintenance.MaintenanceResource;
 import de.fherfurt.carhub360.payment.PaymentResource;
+import de.fherfurt.carhub360.shared.api.JacksonObjectMapperProvider;
 import de.fherfurt.carhub360.shared.api.ValidationExceptionMapper;
 import de.fherfurt.carhub360.vehicle.rent.RentVehicleResource;
 import de.fherfurt.carhub360.vehicle.sale.SaleVehicleResource;
@@ -45,6 +46,7 @@ public class WebApplication extends Application {
         classes.add(PaymentResource.class);
         classes.add(MaintenanceResource.class);
         classes.add(CustomerHistoryResource.class);
+        classes.add(JacksonObjectMapperProvider.class);
         classes.add(ValidationExceptionMapper.class);
         classes.add(OpenApiResource.class);
         return classes;

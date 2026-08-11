@@ -6,6 +6,7 @@ import de.fherfurt.carhub360.customer.CustomerResource;
 import de.fherfurt.carhub360.customer.history.CustomerHistoryResource;
 import de.fherfurt.carhub360.maintenance.MaintenanceResource;
 import de.fherfurt.carhub360.payment.PaymentResource;
+import de.fherfurt.carhub360.shared.api.JacksonObjectMapperProvider;
 import de.fherfurt.carhub360.shared.api.ValidationExceptionMapper;
 import de.fherfurt.carhub360.vehicle.rent.RentVehicleResource;
 import de.fherfurt.carhub360.vehicle.sale.SaleVehicleResource;
@@ -51,6 +52,7 @@ class OpenApiIntegrationTest {
         assertTrue(classes.contains(PaymentResource.class));
         assertTrue(classes.contains(MaintenanceResource.class));
         assertTrue(classes.contains(CustomerHistoryResource.class));
+        assertTrue(classes.contains(JacksonObjectMapperProvider.class));
         assertTrue(classes.contains(ValidationExceptionMapper.class));
         assertTrue(classes.contains(OpenApiResource.class));
     }
